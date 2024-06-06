@@ -1,4 +1,5 @@
 import random # 모듈을 준비한다.
+import time
 def answer_input():
     global answer #정답을 전역 변수로 지정한다.
     answer=input('정답을 입력하세요 (1~5) >>> ') # 정답을 입력받는다.
@@ -13,17 +14,25 @@ quiz=[['다음 중 1세대 포켓몬이 아닌 것은? [15점]','썬더','이브
 # [문제이름,1번,2번,3번,4번,5번,정답의 번호,점수]순으로 5개의 리스트를 하나의 2차원 리스트로 묶는다.
 random. shuffle(quiz) # 퀴즈 순서를 섞는다.
 points=0 # 점수 변수를 정의한다.
-print('지금부터 포덕 테스트를 시작합니다. 총점 100점입니다.')
+print('지금부터 포덕 테스트를 시작합니다. 총 5문제이고 제한시간 60초입니다.')
 input('시작하려면 엔터키를 누르세요 >>> ') # 엔터를 입력받는다.
 print('\n지금부터 시작하겠습니다.\n') # 분할선
+start=time.time()
 for i in quiz:
+    if time.time()>=start+60:
+        print('제한 시간을 초과했습니다. 이후 문제들은 전부 오답 처리됩니다.\n') # 제한 시간을 초과한 경우 알려준다.
+        break
     print(str(quiz.index(i)+1)+'.', i[0]) # 문제를 출력한다.
     for j in range(1,6):
         print(str(j)+')',i[j]) # 선택지를 출력한다.
     print()
+    print(f'{start+60-time.time():.1f}초 남았습니다.', end='') # 남은 시간을 소수점 첫째 자리까지 출력
+    if time.time()>=start+48: print(' 서두르세요.') # 12초 이하 남았다면 빨리 풀으라고 한다.
+    else: print()
     answer_input() # 이 함수는 상단에 있다.
     answer=int(answer) # answer변수를 정수형으로 변환한다.
     answernum=i[6]
+    
     if answer==answernum:
         print('정답입니다!') # 정답을 알려주고 리스트에 설정된 점수를 더한다.
         points+=i[7]
